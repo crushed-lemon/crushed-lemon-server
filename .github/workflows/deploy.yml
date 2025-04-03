@@ -1,0 +1,26 @@
+name: Deploy and Restart Nginx
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: SSH into EC2 and update Nginx
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ec2-user/crushed-lemon-server
+            git pull origin main
+            sudo cp -r /home/ec2-user/crushed-lemon-server/etc/nginx /etc/nginx
+            sudo systemctl restart nginx
