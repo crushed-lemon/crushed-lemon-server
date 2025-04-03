@@ -23,5 +23,7 @@ jobs:
             echo "Connected"
             cd /home/ec2-user/crushed-lemon-server
             git pull origin main
-            sudo cp -r /home/ec2-user/crushed-lemon-server/etc/nginx /etc/nginx
+            echo "Copying files"
+            sudo cp -rf /home/ec2-user/crushed-lemon-server/etc/nginx/* /etc/nginx
+            echo "Restarting nginx"
             sudo systemctl restart nginx
